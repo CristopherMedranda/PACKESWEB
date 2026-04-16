@@ -2,105 +2,203 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>ENVÍOS OCULTOS</title>
+  <title>ARCHIVO // ENVÍOS</title>
+
   <style>
     body {
-      background-color: #0a0a0a;
+      background-color: #050505;
       color: #cfcfcf;
       font-family: "Courier New", monospace;
       text-align: center;
     }
+
     h1 {
-      color: #ff0000;
-      letter-spacing: 3px;
+      color: red;
+      letter-spacing: 4px;
     }
+
     .box {
-      border: 1px solid #333;
+      border: 1px solid #222;
       margin: 20px;
-      padding: 20px;
+      padding: 15px;
       display: inline-block;
-      width: 250px;
-      background: #111;
-      box-shadow: 0 0 10px rgba(255,0,0,0.2);
+      width: 260px;
+      background: #0d0d0d;
+      box-shadow: 0 0 15px rgba(255,0,0,0.15);
+      position: relative;
     }
+
     img {
       width: 100%;
       height: 150px;
       object-fit: cover;
-      margin-bottom: 10px;
-      filter: grayscale(100%) contrast(120%);
+      filter: grayscale(100%) contrast(130%);
     }
+
+    .locked {
+      opacity: 0.4;
+    }
+
+    .locked::after {
+      content: "ACCESO BLOQUEADO";
+      position: absolute;
+      top: 40%;
+      left: 0;
+      right: 0;
+      color: red;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
     button {
-      background: #ff0000;
+      margin-top: 10px;
+      background: red;
       color: white;
       border: none;
-      padding: 10px;
+      padding: 8px;
       cursor: pointer;
     }
+
     button:hover {
-      background: #990000;
+      background: darkred;
     }
-    footer {
-      margin-top: 50px;
+
+    .desc {
       font-size: 12px;
-      color: #555;
+      color: #888;
+      margin-top: 8px;
+      height: 70px;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 11px;
+      color: #444;
+    }
+
+    #mensaje {
+      margin-top: 30px;
+      color: #00ff88;
+      font-size: 14px;
+      min-height: 40px;
     }
   </style>
 </head>
+
 <body>
 
-  <h1>⚠ ENVÍOS OCULTOS ⚠</h1>
-  <p>Solo para quienes saben buscar. Entregas en Ecuador.</p>
+<h1>⚠ ARCHIVO NO INDEXADO ⚠</h1>
+<p id="estado">Inicializando nodo...</p>
 
-  <div class="box">
-    <img src="https://picsum.photos/300/200?random=1">
-    <h2>Caja Nivel 1</h2>
-    <p>Contenido desconocido</p>
-    <p>$15</p>
-    <button onclick="comprar()">Comprar</button>
+<div class="box">
+  <img src="https://picsum.photos/300/200?random=1">
+  <h3>Caja Básica</h3>
+  <p>$15</p>
+  <div class="desc">
+    Recuperada de tránsito no autorizado. Algunos objetos presentan alteraciones.
   </div>
+  <button onclick="comprar('Caja Básica')">Solicitar</button>
+</div>
 
-  <div class="box">
-    <img src="https://picsum.photos/300/200?random=2">
-    <h2>Caja Nivel 2</h2>
-    <p>Objetos raros</p>
-    <p>$35</p>
-    <button onclick="comprar()">Comprar</button>
+<div class="box">
+  <img src="https://picsum.photos/300/200?random=2">
+  <h3>Caja Intermedia</h3>
+  <p>$35</p>
+  <div class="desc">
+    Contenido parcialmente identificado. Incluye material no catalogado oficialmente.
   </div>
+  <button onclick="comprar('Caja Intermedia')">Solicitar</button>
+</div>
 
-  <div class="box">
-    <img src="https://picsum.photos/300/200?random=3">
-    <h2>Caja Nivel 3</h2>
-    <p>No todos la reciben</p>
-    <p>$70</p>
-    <button onclick="comprar()">Comprar</button>
+<div class="box locked">
+  <img src="https://picsum.photos/300/200?random=3">
+  <h3>Caja Nivel ██</h3>
+  <p>$70</p>
+  <div class="desc">
+    Registro eliminado. Usuarios previos reportaron anomalías.
   </div>
+  <button onclick="bloqueado()">Acceso</button>
+</div>
 
-  <div class="box">
-    <img src="https://picsum.photos/300/200?random=4">
-    <h2>Caja Nivel █</h2>
-    <p>Acceso restringido</p>
-    <p>$150</p>
-    <button onclick="comprar()">Comprar</button>
+<div class="box locked">
+  <img src="https://picsum.photos/300/200?random=4">
+  <h3>Caja Clasificada</h3>
+  <p>$150</p>
+  <div class="desc">
+    Distribución restringida. El contenido no figura en registros.
   </div>
+  <button onclick="bloqueado()">Acceso</button>
+</div>
 
-  <script>
-    function comprar() {
-      // REDIRECCIÓN A WHATSAPP (CAMBIA EL NÚMERO)
-      window.location.href = "https://wa.me/593XXXXXXXXX?text=Estoy%20interesado%20en%20las%20cajas";
+<div id="mensaje"></div>
+
+<script>
+
+// ID falso de usuario
+const userID = "USR-" + Math.floor(Math.random() * 999999);
+document.getElementById("estado").innerText = "Nodo activo: ECU-██ | ID: " + userID;
+
+// efecto escritura tipo terminal
+function escribir(texto, velocidad = 35) {
+  let i = 0;
+  const contenedor = document.getElementById("mensaje");
+  contenedor.innerHTML = "";
+
+  function loop() {
+    if (i < texto.length) {
+      contenedor.innerHTML += texto.charAt(i);
+      i++;
+      setTimeout(loop, velocidad);
     }
+  }
+  loop();
+}
 
-    // efecto raro tipo dead web
-    setInterval(() => {
-      document.body.style.backgroundColor = 
-        document.body.style.backgroundColor === 'black' ? '#0a0a0a' : 'black';
-    }, 5000);
-  </script>
+function comprar(tipo) {
 
-  <footer>
-    <p>Este sitio no está indexado. No compartir.</p>
-    <p>Operamos en silencio dentro de Ecuador.</p>
-  </footer>
+  let confirmar = confirm("Confirmar solicitud de " + tipo + "?");
+
+  if(confirmar){
+
+    escribir("Procesando solicitud...");
+
+    setTimeout(() => {
+      escribir("Validando identidad: " + userID);
+    }, 2000);
+
+    setTimeout(() => {
+      escribir("Asignando paquete...");
+    }, 4000);
+
+    setTimeout(() => {
+      escribir("Solicitud aceptada. Preparando envío...");
+    }, 6000);
+
+    setTimeout(() => {
+      escribir("✔ COMPRA CONFIRMADA | Código: " + Math.floor(Math.random()*999999));
+    }, 8000);
+
+  } else {
+    escribir("Operación cancelada.");
+  }
+}
+
+function bloqueado() {
+  escribir("Intento registrado. Acceso denegado para ID: " + userID);
+}
+
+// efecto visual
+setInterval(() => {
+  document.body.style.backgroundColor =
+    document.body.style.backgroundColor === 'black' ? '#050505' : 'black';
+}, 4000);
+
+</script>
+
+<footer>
+<p>Actividad monitoreada.</p>
+<p>No compartir este enlace.</p>
+</footer>
 
 </body>
 </html>
